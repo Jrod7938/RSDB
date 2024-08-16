@@ -3,12 +3,12 @@ package com.gepc.commands
 import com.gepc.models.ItemPriceResponse
 import com.gepc.utils.HttpClientProvider
 import com.gepc.utils.LoggerProvider
-import dev.kord.core.entity.Message
+import dev.kord.core.behavior.interaction.respondPublic
+import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
 import java.text.NumberFormat
@@ -18,16 +18,10 @@ object GECommand {
 
     private val logger = LoggerProvider.logger
 
-    suspend fun handle(message: Message) {
-        val itemName = message.content.removePrefix("/ge").trim()
-        if (itemName.isEmpty()) {
-            logger.warn { "No item name provided in the /ge command." }
-            message.channel.createMessage("Please provide an item name.")
-            return
-        }
-
+    suspend fun handle(event: ChatInputCommandInteractionCreateEvent) {
+        val itemName = event.interaction.command.strings["item"] ?: return
         val itemMessage = fetchItemDetails(itemName)
-        message.channel.createMessage(itemMessage)
+        event.interaction.respondPublic { content = itemMessage }
     }
 
     private suspend fun fetchItemDetails(itemName: String): String {
@@ -59,11 +53,6 @@ object GECommand {
 
         val json = Json.parseToJsonElement(rawResponse).jsonObject
 
-        // Log available keys to diagnose the issue
-        val availableKeys = json.keys.joinToString(", ")
-        logger.debug { "Available keys in the JSON response: $availableKeys" }
-
-        // Attempt case-insensitive match for the item name
         val matchedKey = json.keys.find { it.equals(itemName, ignoreCase = true) }
 
         return if (matchedKey != null) {
