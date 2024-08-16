@@ -144,12 +144,14 @@ object FlipCommand {
         val formattedMargin = NumberFormat.getNumberInstance(Locale.US).format(margin)
 
         return """
-            **Trading Strategy Analysis for $itemName:**
+            ```kotlin
+            Trading Strategy Analysis for $itemName:
             - Latest Price: $formattedPrice GP
             - 30-Day SMA: $formattedSMA GP
             - Margin: $formattedMargin GP
             - Volatility: ${String.format("%.2f", priceVolatility)}
             - Suggestion: $suggestion
+            ```
         """.trimIndent()
     }
 }
