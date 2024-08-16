@@ -73,12 +73,13 @@ object GECommand {
         val formattedVolume = NumberFormat.getNumberInstance(Locale.US).format(itemPriceResponse.volume)
 
         return """
-            ``$itemName
+            ```kotlin
+            $itemName
             ID: ${itemPriceResponse.id}
             Price: $formattedPrice GP
             Volume: $formattedVolume
             Timestamp: ${itemPriceResponse.timestamp}
-            ``
+            ```
         """.trimIndent()
     }
 }
