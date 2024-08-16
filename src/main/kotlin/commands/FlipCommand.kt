@@ -1,114 +1,133 @@
 package com.gepc.commands
 
 import com.gepc.models.ItemPriceResponse
-import com.gepc.utils.HttpClientProvider
+import com.gepc.services.AnalysisService
+import com.gepc.services.PriceService
+import com.gepc.utils.ItemFetcher
 import com.gepc.utils.LoggerProvider
-import dev.kord.core.behavior.interaction.respondPublic
+import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import kotlinx.serialization.json.*
 import java.text.NumberFormat
 import java.util.*
 
 object FlipCommand {
 
     private val logger = LoggerProvider.logger
-
     private const val BUY_THRESHOLD = 0.05
-    private const val SELL_THRESHOLD = 0.10
+    private const val TOP_100_URL = "https://secure.runescape.com/m=itemdb_rs/top100?list=1"
+
+    private val priceService = PriceService()
+    private val analysisService = AnalysisService()
+    private val itemFetcher = ItemFetcher(TOP_100_URL)
 
     suspend fun handle(event: ChatInputCommandInteractionCreateEvent) {
-        val itemName = event.interaction.command.strings["item"] ?: return
-        val itemMessage = executeTradingStrategy(itemName)
-        event.interaction.respondPublic { content = itemMessage }
+        logger.info { "Handling command: ${event.interaction.command.rootName}" }
+        val deferredResponse = event.interaction.deferPublicResponse()
+
+        val itemName = event.interaction.command.strings["item"]
+        val itemMessage = if (itemName.isNullOrBlank()) {
+            findBestFlip()
+        } else {
+            executeBuyStrategy(itemName)
+        }
+
+        deferredResponse.respond { content = itemMessage }
+        logger.info { "Response sent to Discord" }
     }
 
-    private suspend fun executeTradingStrategy(itemName: String): String {
-        val client = HttpClientProvider.client
+    private suspend fun findBestFlip(): String {
+        logger.info { "Fetching top 100 items for flipping analysis" }
+        val itemList = itemFetcher.fetchTop100Items()
 
-        return try {
-            logger.info { "Executing trading strategy for: $itemName" }
-            val latestPrice = getLatestPrice(client, itemName) ?: return "Item '$itemName' not found."
-            val historicalPrices = getHistoricalPrices(client, itemName)
+        if (itemList.isEmpty()) {
+            logger.warn { "No items found in top 100 list" }
+            return "No suitable item found for flipping at this time."
+        }
 
-            val sma = calculateSMA(historicalPrices, 30)  // 30-day simple moving average
-            val priceVolatility = calculateVolatility(historicalPrices)
-            val buySignal = latestPrice.price < sma && priceVolatility < BUY_THRESHOLD
-            val sellSignal = latestPrice.price > sma * (1 + SELL_THRESHOLD) && priceVolatility > BUY_THRESHOLD
+        var bestBuyItem: String? = null
+        var bestBuyMargin = Double.POSITIVE_INFINITY
+        var bestOverallItem: String? = null
+        var bestOverallMargin = Double.NEGATIVE_INFINITY
 
-            val suggestion = when {
-                buySignal -> "Consider buying $itemName. Price is below the 30-day SMA and volatility is low."
-                sellSignal -> "Consider selling $itemName. Price is above the SMA and volatility is high."
-                else -> "No strong buy or sell signal for $itemName at this time."
+        for (item in itemList) {
+            logger.info { "Analyzing item: $item" }
+
+            val latestPrice = priceService.getLatestPrice(item)
+            if (latestPrice == null) {
+                logger.warn { "No latest price found for item: $item" }
+                continue
             }
 
-            logger.info { "Strategy executed for item: $itemName" }
-            formatTradeMessage(itemName, latestPrice, sma, priceVolatility, suggestion)
-        } catch (e: Exception) {
-            logger.error(e) { "Failed to execute trading strategy for '$itemName'" }
-            "Failed to execute trading strategy for '$itemName'."
+            val historicalPrices = priceService.getHistoricalPrices(item)
+
+            val sma = analysisService.calculateSMA(historicalPrices, 30)
+            val priceVolatility = analysisService.calculateVolatility(historicalPrices)
+            val margin = analysisService.calculateMargin(sma, latestPrice.price.toDouble())
+
+            logger.debug {
+                "Item: $item, Latest Price: ${latestPrice.price}, SMA: $sma, " +
+                        "Volatility: $priceVolatility, Margin: $margin"
+            }
+
+            if (analysisService.shouldBuy(latestPrice.price.toDouble(), sma, margin, priceVolatility, BUY_THRESHOLD)) {
+                bestBuyMargin = margin
+                bestBuyItem = item
+                logger.info { "$item is the current best buy candidate with a margin of $margin" }
+            }
+
+            if (margin > bestOverallMargin) {
+                bestOverallMargin = margin
+                bestOverallItem = item
+            }
         }
+
+        return buildBestFlipMessage(bestBuyItem, bestBuyMargin, bestOverallItem, bestOverallMargin)
     }
 
-    private suspend fun getLatestPrice(client: HttpClient, itemName: String): ItemPriceResponse? {
-        val url = "https://api.weirdgloop.org/exchange/history/rs/latest"
-        logger.debug { "Fetching latest price with URL: $url" }
-
-        val response: HttpResponse = client.get(url) {
-            parameter("name", itemName)
-            parameter("lang", "en")
-        }
-
-        val rawResponse = response.bodyAsText()
-        logger.debug { "Raw JSON response: $rawResponse" }
-
-        val json = Json.parseToJsonElement(rawResponse).jsonObject
-        val matchedKey = json.keys.find { it.equals(itemName, ignoreCase = true) }
-
-        return matchedKey?.let {
-            try {
-                json[matchedKey]?.let { Json.decodeFromJsonElement<ItemPriceResponse>(it) }
-            } catch (e: Exception) {
-                logger.error(e) { "Failed to parse latest price for item: $itemName" }
-                null
+    private suspend fun buildBestFlipMessage(
+        bestBuyItem: String?,
+        bestBuyMargin: Double,
+        bestOverallItem: String?,
+        bestOverallMargin: Double
+    ): String {
+        logger.info { "Building flip message" }
+        return when {
+            bestBuyItem != null -> {
+                logger.info { "Best buy item selected: $bestBuyItem" }
+                executeBuyStrategy(bestBuyItem)
+            }
+            bestOverallItem != null -> {
+                logger.info { "Best overall item selected: $bestOverallItem" }
+                executeBuyStrategy(bestOverallItem)
+            }
+            else -> {
+                logger.warn { "No suitable item found for flipping" }
+                "No suitable item found for flipping at this time."
             }
         }
     }
 
-    private suspend fun getHistoricalPrices(client: HttpClient, itemName: String): List<Int> {
-        val url = "https://api.weirdgloop.org/exchange/history/rs/last90d"
-        logger.debug { "Fetching historical prices with URL: $url" }
+    private suspend fun executeBuyStrategy(itemName: String): String {
+        logger.info { "Executing buy strategy for item: $itemName" }
+        val latestPrice = priceService.getLatestPrice(itemName) ?: run {
+            logger.warn { "No latest price found for item: $itemName" }
+            return "Item '$itemName' not found."
+        }
+        val historicalPrices = priceService.getHistoricalPrices(itemName)
 
-        val response: HttpResponse = client.get(url) {
-            parameter("name", itemName)
-            parameter("lang", "en")
+        val sma = analysisService.calculateSMA(historicalPrices, 30)
+        val priceVolatility = analysisService.calculateVolatility(historicalPrices)
+        val margin = analysisService.calculateMargin(sma, latestPrice.price.toDouble())
+
+        logger.info { "Calculated SMA: $sma, Volatility: $priceVolatility, Margin: $margin" }
+
+        val suggestion = if (margin > 0 && priceVolatility < BUY_THRESHOLD && latestPrice.price.toDouble() < sma) {
+            "Consider buying $itemName. Price is below the 30-day SMA and volatility is low."
+        } else {
+            "Not a good time to buy $itemName."
         }
 
-        val rawResponse = response.bodyAsText()
-        logger.debug { "Raw JSON response: $rawResponse" }
-
-        val json = Json.parseToJsonElement(rawResponse).jsonObject
-        val matchedKey = json.keys.find { it.equals(itemName, ignoreCase = true) }
-
-        return matchedKey?.let {
-            json[matchedKey]?.jsonArray?.map {
-                val priceData = it.jsonObject
-                priceData["price"]?.jsonPrimitive?.int ?: 0
-            } ?: emptyList()
-        } ?: emptyList()
-    }
-
-    private fun calculateSMA(prices: List<Int>, period: Int): Double {
-        if (prices.size < period) return prices.average()
-        return prices.takeLast(period).average()
-    }
-
-    private fun calculateVolatility(prices: List<Int>): Double {
-        val avgPrice = prices.average()
-        val squaredDifferences = prices.map { (it - avgPrice) * (it - avgPrice) }
-        return Math.sqrt(squaredDifferences.average())
+        return formatTradeMessage(itemName, latestPrice, sma, priceVolatility, margin, suggestion)
     }
 
     private fun formatTradeMessage(
@@ -116,18 +135,21 @@ object FlipCommand {
         latestPrice: ItemPriceResponse,
         sma: Double,
         priceVolatility: Double,
+        margin: Double,
         suggestion: String
     ): String {
+        logger.info { "Formatting trade message for item: $itemName" }
         val formattedPrice = NumberFormat.getNumberInstance(Locale.US).format(latestPrice.price)
         val formattedSMA = NumberFormat.getNumberInstance(Locale.US).format(sma)
+        val formattedMargin = NumberFormat.getNumberInstance(Locale.US).format(margin)
 
         return """
-            ``Trading Strategy Analysis for $itemName:
+            **Trading Strategy Analysis for $itemName:**
             - Latest Price: $formattedPrice GP
             - 30-Day SMA: $formattedSMA GP
+            - Margin: $formattedMargin GP
             - Volatility: ${String.format("%.2f", priceVolatility)}
             - Suggestion: $suggestion
-            ``
         """.trimIndent()
     }
 }

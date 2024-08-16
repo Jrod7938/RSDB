@@ -23,7 +23,7 @@ suspend fun main() {
             description = "Gives price margins for the item."
         ) {
             string(name = "item", description = "Name of the item to search for."){
-                required = true
+                required = false
             }
         }
 
