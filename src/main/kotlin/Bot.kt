@@ -22,14 +22,18 @@ suspend fun main() {
             name = "flip",
             description = "Gives price margins for the item."
         ) {
-            string(name = "item", description = "Name of the item to search for.")
+            string(name = "item", description = "Name of the item to search for."){
+                required = true
+            }
         }
 
         kord.createGlobalChatInputCommand(
             name = "ge",
             description = "Search for an item in the Grand Exchange."
         ) {
-            string(name = "item", description = "Name of the item to search for.")
+            string(name = "item", description = "Name of the item to search for."){
+                required = true
+            }
         }
     }
 
