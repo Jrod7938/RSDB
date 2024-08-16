@@ -1,11 +1,14 @@
 package com.gepc.commands
 
-import dev.kord.core.entity.Message
+import dev.kord.core.behavior.interaction.respondPublic
+import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 
 object FlipCommand {
 
-    suspend fun handle(message: Message) {
+    suspend fun handle(event: ChatInputCommandInteractionCreateEvent) {
         // TODO: Implement flip margins fetching logic
-        message.channel.createMessage("Flip command is under construction.")
+        event.interaction.respondPublic {
+            content = "Flip command is under construction."
+        }
     }
 }

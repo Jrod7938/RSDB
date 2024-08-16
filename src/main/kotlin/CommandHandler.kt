@@ -2,15 +2,15 @@ package com.gepc
 
 import com.gepc.commands.FlipCommand
 import com.gepc.commands.GECommand
-import dev.kord.core.entity.Message
+import dev.kord.core.Kord
+import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
+import dev.kord.core.on
 
-object CommandHandler {
-    suspend fun handleCommand(message: Message) {
-        val content = message.content
-
-        when{
-            content.startsWith("/ge", ignoreCase = true) -> GECommand.handle(message)
-            content.startsWith("/flip", ignoreCase = true) -> FlipCommand.handle(message)
+suspend fun Kord.handleCommands() {
+    on<ChatInputCommandInteractionCreateEvent> {
+        when (interaction.command.rootName) {
+            "flip" -> FlipCommand.handle(this)
+            "ge" -> GECommand.handle(this)
         }
     }
 }
