@@ -18,28 +18,26 @@ suspend fun main() {
     kord.on<ReadyEvent> {
         logger.info { "Bot is ready!" }
 
-        kord.createGlobalChatInputCommand(
-            name = "flip",
-            description = "Gives price margins for the item."
-        ) {
-            string(name = "item", description = "Name of the item to search for."){
-                required = false
-            }
+        kord.createGlobalChatInputCommand(name = "flip", description = "Find the best flip.") {
+            string(name = "item", description = "Gives price margins for the item.") { required = false }
         }
 
         kord.createGlobalChatInputCommand(
             name = "ge",
             description = "Search for an item in the Grand Exchange."
         ) {
-            string(name = "item", description = "Name of the item to search for."){
-                required = true
-            }
+            string(name = "item", description = "Name of the item to search for.") { required = true }
+        }
+
+        kord.createGlobalChatInputCommand(
+            name = "highscore",
+            description = "Fetch the RuneScape highscore for a player."
+        ) {
+            string(name = "player", description = "The name of the player.") { required = true }
         }
     }
 
     kord.handleCommands()
 
-    kord.login {
-        intents += Intent.MessageContent
-    }
+    kord.login { intents += Intent.MessageContent }
 }
