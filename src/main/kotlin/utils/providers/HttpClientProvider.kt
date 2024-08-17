@@ -1,4 +1,4 @@
-package com.gepc.utils
+package com.gepc.utils.providers
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*

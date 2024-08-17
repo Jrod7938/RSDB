@@ -1,5 +1,6 @@
 package com.gepc.utils
 
+import com.gepc.utils.providers.LoggerProvider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 

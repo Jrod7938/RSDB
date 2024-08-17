@@ -1,6 +1,6 @@
 package com.gepc.services
 
-import com.gepc.utils.LoggerProvider
+import com.gepc.utils.providers.LoggerProvider
 
 class AnalysisService {
 

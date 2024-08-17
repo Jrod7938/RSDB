@@ -1,8 +1,8 @@
 package com.gepc.services
 
 import com.gepc.models.ItemPriceResponse
-import com.gepc.utils.HttpClientProvider
-import com.gepc.utils.LoggerProvider
+import com.gepc.utils.providers.HttpClientProvider
+import com.gepc.utils.providers.LoggerProvider
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*

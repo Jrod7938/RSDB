@@ -4,7 +4,7 @@ import com.gepc.models.ItemPriceResponse
 import com.gepc.services.AnalysisService
 import com.gepc.services.PriceService
 import com.gepc.utils.ItemFetcher
-import com.gepc.utils.LoggerProvider
+import com.gepc.utils.providers.LoggerProvider
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 import java.text.NumberFormat

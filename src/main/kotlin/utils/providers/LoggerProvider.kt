@@ -1,4 +1,4 @@
-package com.gepc.utils
+package com.gepc.utils.providers
 
 import mu.KotlinLogging
 

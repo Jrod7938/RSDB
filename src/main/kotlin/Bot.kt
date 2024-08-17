@@ -1,7 +1,7 @@
 package com.gepc
 
-import com.gepc.utils.LoggerProvider
-import com.gepc.utils.TokenProvider
+import com.gepc.utils.providers.LoggerProvider
+import com.gepc.utils.providers.TokenProvider
 import dev.kord.core.Kord
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.on
@@ -34,6 +34,13 @@ suspend fun main() {
             description = "Fetch the RuneScape highscore for a player."
         ) {
             string(name = "player", description = "The name of the player.") { required = true }
+        }
+
+        kord.createGlobalChatInputCommand(
+            name = "wiki",
+            description = "Searches RuneScape Wiki"
+        ) {
+            string(name = "object", description = "The object to look up in the RuneScape Wiki.") { required = true }
         }
     }
 
