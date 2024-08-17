@@ -2,7 +2,7 @@ package com.gepc.commands
 
 import com.gepc.models.HighscoreEntry
 import com.gepc.models.Skill
-import com.gepc.service.HighscoreService
+import com.gepc.services.HighscoreService
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 import java.text.NumberFormat

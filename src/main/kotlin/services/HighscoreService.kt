@@ -1,8 +1,8 @@
-package com.gepc.service
+package com.gepc.services
 
 import com.gepc.models.HighscoreEntry
 import com.gepc.models.Skill
-import com.gepc.utils.HttpClientProvider
+import com.gepc.utils.providers.HttpClientProvider
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
