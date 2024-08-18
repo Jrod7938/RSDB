@@ -24,13 +24,13 @@ jobs:
         run: ./gradlew clean build
 
       - name: Rename JAR file
-        run: mv build/libs/RSDB-1.0-SNAPSHOT.jar build/libs/RSDS.jar
+        run: mv build/libs/RSDB-1.0-SNAPSHOT.jar build/libs/RSDB.jar
 
       - name: Upload JAR as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: RSDS.jar
-          path: build/libs/RSDS.jar
+          name: RSDB.jar
+          path: build/libs/RSDB.jar
 
       - name: Create GitHub Release
         id: create_release
@@ -50,6 +50,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RSDB_ACTIONS_PAT }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/RSDS.jar
-          asset_name: RSDS.jar
+          asset_path: build/libs/RSDB.jar
+          asset_name: RSDB.jar
           asset_content_type: application/java-archive
