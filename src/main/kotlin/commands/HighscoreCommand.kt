@@ -21,13 +21,31 @@ object HighscoreCommand {
      * This method fetches the highscores for the specified player from the RuneScape Hiscores API
      * and responds to the user with the formatted results.
      *
+     * The method first checks if the command includes a specific player name. If not, it attempts to
+     * use the player's RuneScape username linked to their Discord profile (stored in the `userProfiles` map).
+     * If neither is available, the command will respond with an error message.
+     *
      * @param event The event triggered by the "highscore" command.
+     * @param userProfiles A mutable map linking Discord user IDs to their linked RuneScape usernames.
      */
-    suspend fun handle(event: ChatInputCommandInteractionCreateEvent) {
+    suspend fun handle(event: ChatInputCommandInteractionCreateEvent, userProfiles: MutableMap<String, String>) {
         val deferredResponse = event.interaction.deferPublicResponse()
-        val playerName = event.interaction.command.strings["player"] ?: return
-        val highscoreEntries = HighscoreService.getHiscores(playerName)
+        val userId = event.interaction.user.id.toString()
 
+        // Check if the player name is provided or linked to the Discord ID
+        val playerName = event.interaction.command.strings["player"] ?: userProfiles[userId]
+
+        if (playerName.isNullOrEmpty()) {
+            // If no player name is provided and no profile is linked, respond with an error message
+            deferredResponse.respond {
+                content =
+                    "You haven't linked a RuneScape profile to your Discord account. Please use the `/me` command to link your account or specify a player name."
+            }
+            return
+        }
+
+        // Fetch the highscore if the player name is available
+        val highscoreEntries = HighscoreService.getHiscores(playerName)
         val message = formatHighscoreResponse(playerName, highscoreEntries)
 
         deferredResponse.respond {

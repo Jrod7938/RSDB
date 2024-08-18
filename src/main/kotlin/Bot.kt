@@ -33,7 +33,7 @@ suspend fun main(args: Array<String>) {
             name = "highscore",
             description = "Fetch the RuneScape highscore for a player."
         ) {
-            string(name = "player", description = "The name of the player.") { required = true }
+            string(name = "player", description = "The name of the player.") { required = false }
         }
 
         kord.createGlobalChatInputCommand(
@@ -41,6 +41,12 @@ suspend fun main(args: Array<String>) {
             description = "Searches RuneScape Wiki"
         ) {
             string(name = "object", description = "The object to look up in the RuneScape Wiki.") { required = true }
+        }
+        kord.createGlobalChatInputCommand(
+            name = "me",
+            description = "Links Discord account to RuneScape account."
+        ) {
+            string(name = "username", description = "RuneScape Username.") { required = true }
         }
     }
 
