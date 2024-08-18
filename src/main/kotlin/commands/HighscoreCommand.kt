@@ -21,11 +21,17 @@ object HighscoreCommand {
      * This method fetches the highscores for the specified player from the RuneScape Hiscores API
      * and responds to the user with the formatted results.
      *
+     * The method first checks if the command includes a specific player name. If not, it attempts to
+     * use the player's RuneScape username linked to their Discord profile (stored in the `userProfiles` map).
+     * If neither is available, the command will not proceed.
+     *
      * @param event The event triggered by the "highscore" command.
+     * @param userProfiles A mutable map linking Discord user IDs to their linked RuneScape usernames.
      */
-    suspend fun handle(event: ChatInputCommandInteractionCreateEvent) {
+    suspend fun handle(event: ChatInputCommandInteractionCreateEvent, userProfiles: MutableMap<String, String>) {
         val deferredResponse = event.interaction.deferPublicResponse()
-        val playerName = event.interaction.command.strings["player"] ?: return
+        val userId = event.interaction.user.id.toString()
+        val playerName = event.interaction.command.strings["player"] ?: userProfiles[userId] ?: return
         val highscoreEntries = HighscoreService.getHiscores(playerName)
 
         val message = formatHighscoreResponse(playerName, highscoreEntries)
