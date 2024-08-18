@@ -1,7 +1,7 @@
-package com.gepc.commands
+package com.rsdb.commands
 
-import com.gepc.utils.UrlAnalyzer
-import com.gepc.utils.providers.LoggerProvider
+import com.rsdb.utils.UrlAnalyzer
+import com.rsdb.utils.providers.LoggerProvider
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 

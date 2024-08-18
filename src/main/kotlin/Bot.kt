@@ -1,7 +1,7 @@
-package com.gepc
+package com.rsdb
 
-import com.gepc.utils.providers.LoggerProvider
-import com.gepc.utils.providers.TokenProvider
+import com.rsdb.utils.providers.LoggerProvider
+import com.rsdb.utils.providers.TokenProvider
 import dev.kord.core.Kord
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.on

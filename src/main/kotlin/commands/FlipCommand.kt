@@ -1,10 +1,10 @@
-package com.gepc.commands
+package com.rsdb.commands
 
-import com.gepc.models.ItemPriceResponse
-import com.gepc.services.AnalysisService
-import com.gepc.services.PriceService
-import com.gepc.utils.ItemFetcher
-import com.gepc.utils.providers.LoggerProvider
+import com.rsdb.models.ItemPriceResponse
+import com.rsdb.services.AnalysisService
+import com.rsdb.services.PriceService
+import com.rsdb.utils.ItemFetcher
+import com.rsdb.utils.providers.LoggerProvider
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 import java.text.NumberFormat

@@ -1,4 +1,4 @@
-package com.gepc.models
+package com.rsdb.models
 
 data class HighscoreEntry(
     val rank: Int,

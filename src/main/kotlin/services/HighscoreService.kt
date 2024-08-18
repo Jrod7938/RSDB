@@ -1,8 +1,8 @@
-package com.gepc.services
+package com.rsdb.services
 
-import com.gepc.models.HighscoreEntry
-import com.gepc.models.Skill
-import com.gepc.utils.providers.HttpClientProvider
+import com.rsdb.models.HighscoreEntry
+import com.rsdb.models.Skill
+import com.rsdb.utils.providers.HttpClientProvider
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers

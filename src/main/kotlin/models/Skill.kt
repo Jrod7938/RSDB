@@ -1,4 +1,4 @@
-package com.gepc.models
+package com.rsdb.models
 
 enum class Skill(val displayName: String) {
     OVERALL("Overall"),

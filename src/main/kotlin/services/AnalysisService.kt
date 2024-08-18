@@ -1,6 +1,6 @@
-package com.gepc.services
+package com.rsdb.services
 
-import com.gepc.utils.providers.LoggerProvider
+import com.rsdb.utils.providers.LoggerProvider
 
 class AnalysisService {
 

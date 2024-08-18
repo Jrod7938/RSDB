@@ -1,4 +1,4 @@
-package com.gepc.models
+package com.rsdb.models
 
 import kotlinx.serialization.Serializable
 

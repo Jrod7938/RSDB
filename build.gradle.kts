@@ -4,11 +4,11 @@ plugins {
     application
 }
 
-group = "com.gepc"
+group = "com.rsdb"
 version = "1.0-SNAPSHOT"
 
 application {
-    mainClass.set("com.gepc.BotKt")
+    mainClass.set("com.rsdb.BotKt")
 }
 
 repositories {

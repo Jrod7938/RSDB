@@ -1,9 +1,9 @@
-package com.gepc
+package com.rsdb
 
-import com.gepc.commands.FlipCommand
-import com.gepc.commands.GECommand
-import com.gepc.commands.HighscoreCommand
-import com.gepc.commands.WikiCommand
+import com.rsdb.commands.FlipCommand
+import com.rsdb.commands.GECommand
+import com.rsdb.commands.HighscoreCommand
+import com.rsdb.commands.WikiCommand
 import dev.kord.core.Kord
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 import dev.kord.core.on

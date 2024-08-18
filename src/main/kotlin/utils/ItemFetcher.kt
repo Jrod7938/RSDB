@@ -1,6 +1,6 @@
-package com.gepc.utils
+package com.rsdb.utils
 
-import com.gepc.utils.providers.LoggerProvider
+import com.rsdb.utils.providers.LoggerProvider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 

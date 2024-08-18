@@ -1,7 +1,7 @@
-package com.gepc.commands
+package com.rsdb.commands
 
-import com.gepc.services.ItemDetailsService
-import com.gepc.utils.providers.LoggerProvider
+import com.rsdb.services.ItemDetailsService
+import com.rsdb.utils.providers.LoggerProvider
 import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 
