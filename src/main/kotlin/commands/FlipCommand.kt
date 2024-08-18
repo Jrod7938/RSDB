@@ -10,6 +10,13 @@ import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 import java.text.NumberFormat
 import java.util.*
 
+/**
+ * Command handler for the "flip" command in the RuneScape Discord bot.
+ *
+ * This command analyzes items from the RuneScape Grand Exchange to find the best flipping opportunities.
+ * It calculates metrics such as the Simple Moving Average (SMA), price volatility, and margin to suggest
+ * whether an item is a good buy candidate.
+ */
 object FlipCommand {
 
     private val logger = LoggerProvider.logger
@@ -20,6 +27,14 @@ object FlipCommand {
     private val analysisService = AnalysisService()
     private val itemFetcher = ItemFetcher(TOP_100_URL)
 
+    /**
+     * Handles the execution of the "flip" command.
+     *
+     * Depending on the provided item name, this method either finds the best item to flip from the top 100 items
+     * or analyzes a specific item to determine if it's a good buy candidate.
+     *
+     * @param event The event triggered by the "flip" command.
+     */
     suspend fun handle(event: ChatInputCommandInteractionCreateEvent) {
         logger.info { "Handling command: ${event.interaction.command.rootName}" }
         val deferredResponse = event.interaction.deferPublicResponse()
@@ -35,6 +50,14 @@ object FlipCommand {
         logger.info { "Response sent to Discord" }
     }
 
+    /**
+     * Finds the best item to flip from the top 100 items on the RuneScape Grand Exchange.
+     *
+     * This method analyzes each item in the top 100 list to determine the best buy and overall flip candidate
+     * based on margin and price volatility.
+     *
+     * @return A message with the best flipping opportunities.
+     */
     private suspend fun findBestFlip(): String {
         logger.info { "Fetching top 100 items for flipping analysis" }
         val itemList = itemFetcher.fetchTop100Items()
@@ -84,6 +107,15 @@ object FlipCommand {
         return buildBestFlipMessage(bestBuyItem, bestBuyMargin, bestOverallItem, bestOverallMargin)
     }
 
+    /**
+     * Builds the message to display the best flip opportunities.
+     *
+     * @param bestBuyItem The name of the item with the best buy margin.
+     * @param bestBuyMargin The best buy margin found.
+     * @param bestOverallItem The name of the item with the best overall margin.
+     * @param bestOverallMargin The best overall margin found.
+     * @return A message summarizing the best flip opportunities.
+     */
     private suspend fun buildBestFlipMessage(
         bestBuyItem: String?,
         bestBuyMargin: Double,
@@ -107,6 +139,15 @@ object FlipCommand {
         }
     }
 
+    /**
+     * Executes the buy strategy for a specific item.
+     *
+     * This method analyzes the item based on its latest price, SMA, volatility, and margin to determine
+     * if it's a good buy candidate.
+     *
+     * @param itemName The name of the item to analyze.
+     * @return A message with the analysis results and suggestions.
+     */
     private suspend fun executeBuyStrategy(itemName: String): String {
         logger.info { "Executing buy strategy for item: $itemName" }
         val latestPrice = priceService.getLatestPrice(itemName) ?: run {
@@ -130,6 +171,20 @@ object FlipCommand {
         return formatTradeMessage(itemName, latestPrice, sma, priceVolatility, margin, suggestion)
     }
 
+    /**
+     * Formats the trade analysis message for a specific item.
+     *
+     * This message includes the latest price, 30-day SMA, margin, volatility, and a suggestion
+     * based on the analysis results.
+     *
+     * @param itemName The name of the item being analyzed.
+     * @param latestPrice The latest price information for the item.
+     * @param sma The 30-day Simple Moving Average (SMA) for the item.
+     * @param priceVolatility The calculated price volatility for the item.
+     * @param margin The margin between the SMA and the latest price.
+     * @param suggestion The suggested action based on the analysis.
+     * @return A formatted string with the trade analysis results.
+     */
     private fun formatTradeMessage(
         itemName: String,
         latestPrice: ItemPriceResponse,

@@ -12,10 +12,27 @@ import kotlinx.serialization.json.jsonObject
 import java.text.NumberFormat
 import java.util.*
 
+/**
+ * A service class that fetches and formats item details from the RuneScape Grand Exchange.
+ *
+ * This service interacts with an external API to retrieve the latest price and volume information
+ * for a given item and formats the data into a user-friendly message.
+ *
+ * @property client The HTTP client used to make requests. Defaults to [HttpClientProvider.client].
+ */
 class ItemDetailsService(private val client: HttpClient = HttpClientProvider.client) {
 
     private val logger = LoggerProvider.logger
 
+    /**
+     * Fetches item details for a given item name and returns a formatted message.
+     *
+     * This method first attempts to retrieve the item price data from an external API.
+     * If successful, it formats the data into a message; otherwise, it returns an error message.
+     *
+     * @param itemName The name of the item to fetch details for.
+     * @return A formatted string containing item details or an error message.
+     */
     suspend fun getItemDetailsMessage(itemName: String): String {
         return try {
             logger.info { "Fetching item details for: $itemName" }
@@ -29,6 +46,15 @@ class ItemDetailsService(private val client: HttpClient = HttpClientProvider.cli
         }
     }
 
+    /**
+     * Fetches the price details for a given item name from the RuneScape Grand Exchange API.
+     *
+     * This method makes an HTTP GET request to the API and parses the JSON response
+     * to extract price information for the specified item.
+     *
+     * @param itemName The name of the item to fetch the price for.
+     * @return An [ItemPriceResponse] object containing the item's price details, or `null` if the item is not found.
+     */
     private suspend fun fetchItemPrice(itemName: String): ItemPriceResponse? {
         val url = "https://api.weirdgloop.org/exchange/history/rs/latest"
         logger.debug { "Searching for item price with URL: $url" }
@@ -57,6 +83,15 @@ class ItemDetailsService(private val client: HttpClient = HttpClientProvider.cli
         }
     }
 
+    /**
+     * Formats the item details into a message string.
+     *
+     * The message includes the item's ID, price, volume, and timestamp, formatted for readability.
+     *
+     * @param itemName The name of the item.
+     * @param itemPriceResponse The [ItemPriceResponse] containing the item's details.
+     * @return A formatted string with the item's details.
+     */
     private fun formatItemMessage(itemName: String, itemPriceResponse: ItemPriceResponse): String {
         val formattedPrice = NumberFormat.getNumberInstance(Locale.US).format(itemPriceResponse.price)
         val formattedVolume = NumberFormat.getNumberInstance(Locale.US).format(itemPriceResponse.volume)

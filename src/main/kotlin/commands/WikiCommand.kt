@@ -5,6 +5,13 @@ import com.rsdb.utils.providers.LoggerProvider
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 
+/**
+ * Command handler for the "wiki" command in the RuneScape Discord bot.
+ *
+ * This command searches the RuneScape Wiki for a specified object and returns a link to the
+ * corresponding page. It validates the URL to ensure it leads to a valid page and responds
+ * with either the page title or the object name.
+ */
 object WikiCommand {
 
     private val logger = LoggerProvider.logger
@@ -18,6 +25,10 @@ object WikiCommand {
 
     /**
      * Handles the chat input command event, validates the URL, and sends an appropriate response.
+     *
+     * This method builds a URL based on the object name provided in the command, checks if the
+     * URL points to a valid page, and sends a response with either the page title or an error
+     * message.
      *
      * @param event The event containing the interaction and command data.
      */
@@ -61,6 +72,9 @@ object WikiCommand {
 
     /**
      * Generates a response message with either the page title or the object name.
+     *
+     * This method extracts the title of the page at the given URL using a CSS selector. If the
+     * title is found, it is used in the response; otherwise, the object name is used.
      *
      * @param objectName The name of the object to display if no page title is found.
      * @param url The URL to include in the response.
