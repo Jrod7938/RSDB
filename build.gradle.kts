@@ -31,6 +31,21 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.14")
 }
 
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes["Main-Class"] = "com.rsdb.BotKt"
+    }
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
+    })
+}
+
+
 tasks.test {
     useJUnitPlatform()
 }
@@ -40,5 +55,5 @@ tasks.dokkaHtml {
 }
 
 kotlin {
-    jvmToolchain(19)
+    jvmToolchain(17)
 }

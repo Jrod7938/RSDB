@@ -10,8 +10,8 @@ import dev.kord.gateway.PrivilegedIntent
 import dev.kord.rest.builder.interaction.string
 
 @OptIn(PrivilegedIntent::class)
-suspend fun main() {
-    val token = TokenProvider.getToken()
+suspend fun main(args: Array<String>) {
+    val token = TokenProvider.getToken(args.getOrNull(0))
     val kord = Kord(token)
     val logger = LoggerProvider.logger
 

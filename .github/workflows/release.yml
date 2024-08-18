@@ -1,0 +1,54 @@
+name: Build and Release JAR
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Rename JAR file
+        run: mv build/libs/RSDB-1.0-SNAPSHOT.jar build/libs/RSDS.jar
+
+      - name: Upload JAR as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: RSDS.jar
+          path: build/libs/RSDS.jar
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RSDB_ACTIONS_PAT }}
+        with:
+          tag_name: ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          draft: false
+          prerelease: false
+
+      - name: Upload JAR to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RSDB_ACTIONS_PAT }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/libs/RSDS.jar
+          asset_name: RSDS.jar
+          asset_content_type: application/java-archive
