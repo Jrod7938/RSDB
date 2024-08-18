@@ -1,5 +1,6 @@
 package com.rsdb.commands
 
+import com.rsdb.utils.providers.LoggerProvider
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 
@@ -11,6 +12,9 @@ import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
  * the mapping between Discord user IDs and RuneScape usernames.
  */
 object MeCommand {
+
+    // Logger instance for logging activities in this command
+    private val logger = LoggerProvider.logger
 
     /**
      * Handles the execution of the "me" command.
@@ -27,13 +31,20 @@ object MeCommand {
         val discordUserId = event.interaction.user.id.toString()
         val runescapeUsername = event.interaction.command.options["username"]?.value.toString()
 
+        // Log the received command and user details
+        logger.info { "Received /me command from Discord user ID: $discordUserId to link RuneScape username: $runescapeUsername" }
+
         // Store the username linked to the Discord ID
         userProfiles[discordUserId] = runescapeUsername
+        logger.info { "Linked RuneScape username: $runescapeUsername to Discord user ID: $discordUserId" }
 
         // Respond to the user
         response.respond {
             content =
                 "RuneScape Profile [$runescapeUsername](https://secure.runescape.com/m=hiscore/compare?user1=$runescapeUsername) has been linked to your Discord profile."
         }
+
+        // Log the successful response to the user
+        logger.info { "Responded to Discord user ID: $discordUserId with a confirmation of the linked RuneScape username." }
     }
 }
