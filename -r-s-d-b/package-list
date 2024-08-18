@@ -6,7 +6,9 @@ $dokka.location:com.rsdb.commands/FlipCommand/handle/#dev.kord.core.event.intera
 $dokka.location:com.rsdb.commands/GECommand///PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-g-e-command/index.html
 $dokka.location:com.rsdb.commands/GECommand/handle/#dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent/PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-g-e-command/handle.html
 $dokka.location:com.rsdb.commands/HighscoreCommand///PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-highscore-command/index.html
-$dokka.location:com.rsdb.commands/HighscoreCommand/handle/#dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent/PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-highscore-command/handle.html
+$dokka.location:com.rsdb.commands/HighscoreCommand/handle/#dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent#kotlin.collections.MutableMap[kotlin.String,kotlin.String]/PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-highscore-command/handle.html
+$dokka.location:com.rsdb.commands/MeCommand///PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-me-command/index.html
+$dokka.location:com.rsdb.commands/MeCommand/handle/#dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent#kotlin.collections.MutableMap[kotlin.String,kotlin.String]/PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-me-command/handle.html
 $dokka.location:com.rsdb.commands/WikiCommand///PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-wiki-command/index.html
 $dokka.location:com.rsdb.commands/WikiCommand/handle/#dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent/PointingToDeclaration/-r-s-d-b/com.rsdb.commands/-wiki-command/handle.html
 $dokka.location:com.rsdb.models////PointingToDeclaration/-r-s-d-b/com.rsdb.models/index.html
@@ -129,6 +131,7 @@ $dokka.location:com.rsdb.utils/UrlAnalyzer/validateUrl/#kotlin.String#kotlin.Str
 $dokka.location:com.rsdb////PointingToDeclaration/-r-s-d-b/com.rsdb/index.html
 $dokka.location:com.rsdb//handleCommands/dev.kord.core.Kord#/PointingToDeclaration/-r-s-d-b/com.rsdb/handle-commands.html
 $dokka.location:com.rsdb//main/#kotlin.Array[kotlin.String]/PointingToDeclaration/-r-s-d-b/com.rsdb/main.html
+$dokka.location:com.rsdb//userProfiles/#/PointingToDeclaration/-r-s-d-b/com.rsdb/user-profiles.html
 com.rsdb
 com.rsdb.commands
 com.rsdb.models
