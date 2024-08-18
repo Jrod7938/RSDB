@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.0.0"
     kotlin("plugin.serialization") version "2.0.0"
+    id("org.jetbrains.dokka") version "1.8.10"
     application
 }
 
@@ -33,6 +34,11 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.dokkaHtml {
+    outputDirectory.set(layout.buildDirectory.dir("dokka").get().asFile)
+}
+
 kotlin {
     jvmToolchain(19)
 }
