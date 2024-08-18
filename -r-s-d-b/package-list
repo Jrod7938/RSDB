@@ -134,7 +134,7 @@ $dokka.location:com.rsdb.utils.providers/HttpClientProvider/client/#/PointingToD
 $dokka.location:com.rsdb.utils.providers/LoggerProvider///PointingToDeclaration/-r-s-d-b/com.rsdb.utils.providers/-logger-provider/index.html
 $dokka.location:com.rsdb.utils.providers/LoggerProvider/logger/#/PointingToDeclaration/-r-s-d-b/com.rsdb.utils.providers/-logger-provider/logger.html
 $dokka.location:com.rsdb.utils.providers/TokenProvider///PointingToDeclaration/-r-s-d-b/com.rsdb.utils.providers/-token-provider/index.html
-$dokka.location:com.rsdb.utils.providers/TokenProvider/getToken/#/PointingToDeclaration/-r-s-d-b/com.rsdb.utils.providers/-token-provider/get-token.html
+$dokka.location:com.rsdb.utils.providers/TokenProvider/getToken/#kotlin.String?/PointingToDeclaration/-r-s-d-b/com.rsdb.utils.providers/-token-provider/get-token.html
 $dokka.location:com.rsdb.utils////PointingToDeclaration/-r-s-d-b/com.rsdb.utils/index.html
 $dokka.location:com.rsdb.utils/ItemFetcher///PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-item-fetcher/index.html
 $dokka.location:com.rsdb.utils/ItemFetcher/ItemFetcher/#kotlin.String/PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-item-fetcher/-item-fetcher.html
@@ -144,7 +144,7 @@ $dokka.location:com.rsdb.utils/UrlAnalyzer/extractTextFromHTML/#kotlin.String#ko
 $dokka.location:com.rsdb.utils/UrlAnalyzer/validateUrl/#kotlin.String#kotlin.String/PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-url-analyzer/validate-url.html
 $dokka.location:com.rsdb////PointingToDeclaration/-r-s-d-b/com.rsdb/index.html
 $dokka.location:com.rsdb//handleCommands/dev.kord.core.Kord#/PointingToDeclaration/-r-s-d-b/com.rsdb/handle-commands.html
-$dokka.location:com.rsdb//main/#/PointingToDeclaration/-r-s-d-b/com.rsdb/main.html
+$dokka.location:com.rsdb//main/#kotlin.Array[kotlin.String]/PointingToDeclaration/-r-s-d-b/com.rsdb/main.html
 com.rsdb
 com.rsdb.commands
 com.rsdb.models
