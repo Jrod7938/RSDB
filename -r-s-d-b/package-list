@@ -140,7 +140,7 @@ $dokka.location:com.rsdb.utils/ItemFetcher///PointingToDeclaration/-r-s-d-b/com
 $dokka.location:com.rsdb.utils/ItemFetcher/ItemFetcher/#kotlin.String/PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-item-fetcher/-item-fetcher.html
 $dokka.location:com.rsdb.utils/ItemFetcher/fetchTop100Items/#/PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-item-fetcher/fetch-top100-items.html
 $dokka.location:com.rsdb.utils/UrlAnalyzer///PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-url-analyzer/index.html
-$dokka.location:com.rsdb.utils/UrlAnalyzer/getPageTitle/#kotlin.String/PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-url-analyzer/get-page-title.html
+$dokka.location:com.rsdb.utils/UrlAnalyzer/extractTextFromHTML/#kotlin.String#kotlin.String/PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-url-analyzer/extract-text-from-h-t-m-l.html
 $dokka.location:com.rsdb.utils/UrlAnalyzer/validateUrl/#kotlin.String#kotlin.String/PointingToDeclaration/-r-s-d-b/com.rsdb.utils/-url-analyzer/validate-url.html
 $dokka.location:com.rsdb////PointingToDeclaration/-r-s-d-b/com.rsdb/index.html
 $dokka.location:com.rsdb//handleCommands/dev.kord.core.Kord#/PointingToDeclaration/-r-s-d-b/com.rsdb/handle-commands.html
