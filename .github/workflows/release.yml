@@ -36,12 +36,13 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.RSDB_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.sha }}
-          release_name: Release ${{ github.sha }}
+          tag_name: "v1.0-${{ github.sha }}"
+          release_name: "Release v1.0"
           draft: false
           prerelease: false
+
 
       - name: Upload JAR to Release
         uses: actions/upload-release-asset@v1
