@@ -13,6 +13,8 @@ object WikiCommand {
     private const val WIKI_URL = "https://runescape.wiki/w/"
     // Default message to show if the page does not contain interesting content
     private const val ERROR_PAGE_MESSAGE = "Nothing interesting happens."
+    // CSS selector for extracting the page title from the HTML
+    private const val PAGE_TITLE_CSS_SELECTOR = "span.mw-page-title-main"
 
     /**
      * Handles the chat input command event, validates the URL, and sends an appropriate response.
@@ -48,7 +50,7 @@ object WikiCommand {
     }
 
     /**
-     * Builds the full URL for the given object name.
+     * Builds the full URL for the given object name by appending it to the base URL.
      *
      * @param objectName The name of the object to include in the URL.
      * @return The full URL as a string, combining the base URL and the object name.
@@ -58,15 +60,15 @@ object WikiCommand {
     }
 
     /**
-     * Generates a response message with the page title or object name.
+     * Generates a response message with either the page title or the object name.
      *
      * @param objectName The name of the object to display if no page title is found.
      * @param url The URL to include in the response.
      * @return A formatted string containing either the page title or the object name, with the URL embedded.
      */
     private fun wikiCommandResponse(objectName: String, url: String): String {
-        // Retrieve the page title from the URL
-        val pageTitle = UrlAnalyzer.getPageTitle(url)
+        // Retrieve the page title from the given URL
+        val pageTitle = UrlAnalyzer.extractTextFromHTML(url, PAGE_TITLE_CSS_SELECTOR)
 
         // Return a message with the page title if available; otherwise, use the object name
         return if (pageTitle.isNullOrEmpty()) {
