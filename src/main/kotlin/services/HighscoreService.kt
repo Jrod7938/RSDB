@@ -8,8 +8,24 @@ import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/**
+ * A service that retrieves and processes RuneScape highscore data for a given player.
+ *
+ * This service uses the RuneScape Hiscores API to fetch a player's highscore data and parses
+ * the response into a map of [Skill] to [HighscoreEntry].
+ */
 object HighscoreService {
 
+    /**
+     * Fetches the hiscores for a given player from the RuneScape Hiscores API.
+     *
+     * This method makes an HTTP request to the RuneScape Hiscores API and parses the response into
+     * a map of [Skill] to [HighscoreEntry], where each entry represents the player's rank, level,
+     * and experience in a specific skill.
+     *
+     * @param playerName The name of the player whose hiscores are to be fetched.
+     * @return A map of [Skill] to [HighscoreEntry], or `null` if the fetch or parsing fails.
+     */
     suspend fun getHiscores(playerName: String): Map<Skill, HighscoreEntry>? {
         return withContext(Dispatchers.IO) {
             try {
@@ -25,6 +41,15 @@ object HighscoreService {
         }
     }
 
+    /**
+     * Parses the response from the RuneScape Hiscores API into a map of [Skill] to [HighscoreEntry].
+     *
+     * The response is expected to be a CSV-like string where each line corresponds to a skill.
+     * The line format is "rank,level,experience".
+     *
+     * @param responseBody The response body from the Hiscores API as a [String].
+     * @return A map of [Skill] to [HighscoreEntry], or `null` if the parsing fails.
+     */
     private fun parseResponse(responseBody: String): Map<Skill, HighscoreEntry>? {
         return responseBody.lines().mapIndexedNotNull { index, line ->
             val parts = line.split(",")

@@ -1,5 +1,14 @@
 package com.rsdb.models
 
+/**
+ * An enum class representing various skills and activities in RuneScape.
+ *
+ * Each skill or activity is associated with a display name that can be used
+ * for user-friendly representations. The enum also includes a companion object
+ * method for retrieving a skill based on its index in the enum.
+ *
+ * @property displayName The user-friendly name of the skill or activity.
+ */
 enum class Skill(val displayName: String) {
     OVERALL("Overall"),
     ATTACK("Attack"),
@@ -62,7 +71,14 @@ enum class Skill(val displayName: String) {
     CLUE_SCROLLS_ELITE("Clue Scrolls Elite"),
     CLUE_SCROLLS_MASTER("Clue Scrolls Master");
 
+
     companion object {
+        /**
+         * Retrieves a [Skill] enum instance based on its index in the enum declaration.
+         *
+         * @param index The index of the skill in the enum.
+         * @return The corresponding [Skill] enum instance, or `null` if the index is out of bounds.
+         */
         fun fromIndex(index: Int): Skill? {
             return entries.getOrNull(index)
         }
