@@ -8,11 +8,11 @@ object UrlAnalyzer {
     private val logger = LoggerProvider.logger
 
     /**
-     * Validates a URL by checking if it contains a specific text.
+     * Validates the content of a URL by checking if it contains a specific text.
      *
      * @param url The URL to validate.
      * @param findText The text to search for in the content of the URL.
-     * @return True if the URL does not contain the specified text; false otherwise.
+     * @return `true` if the specified text is not present in the URL content; `false` otherwise.
      */
     fun validateUrl(url: String, findText: String): Boolean {
         logger.info { "Validating the URL: $url" }
@@ -38,27 +38,28 @@ object UrlAnalyzer {
     }
 
     /**
-     * Retrieves the page title from a URL.
+     * Extracts a specific element's text from a URL based on a CSS selector.
      *
-     * @param url The URL from which to retrieve the page title.
-     * @return The page title if found; null otherwise.
+     * @param url The URL from which to retrieve the element.
+     * @param cssSelector The CSS selector used to locate the desired element.
+     * @return The text content of the selected element if found; `null` otherwise.
      */
-    fun getPageTitle(url: String): String? {
+    fun extractTextFromHTML(url: String, cssSelector: String): String? {
         return try {
             // Connect to the URL and retrieve the document
             val document = Jsoup.connect(url).get()
-            // Select the element that contains the page title
-            val element = document.select("span.mw-page-title-main").firstOrNull()
-            val pageTitle = element?.text()
+            // Select the element that matches the CSS selector
+            val element = document.select(cssSelector).firstOrNull()
+            val text = element?.text()
 
-            // Log the page title if found, or a warning if not found
-            if (pageTitle != null) {
-                logger.info { "Found page title: $pageTitle" }
+            // Log the value found or a warning if the element is not found
+            if (text != null) {
+                logger.info { "Found the value '$text'" }
             } else {
-                logger.warn { "Page title not found in $url" }
+                logger.warn { "Value not found for CSS selector '$cssSelector'" }
             }
 
-            pageTitle
+            text
         } catch (exception: Exception) {
             // Log an error message if the URL cannot be accessed
             logger.error { "Failed to access the URL: $url. Exception: $exception" }
