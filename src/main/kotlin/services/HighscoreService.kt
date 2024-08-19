@@ -38,8 +38,9 @@ object HighscoreService {
     suspend fun getHiscores(playerName: String): Map<Skill, HighscoreEntry>? {
         return withContext(Dispatchers.IO) {
             try {
+                val processedName = playerName.trim().replace(" ", "_")
                 val response: HttpResponse =
-                    HttpClientProvider.client.get("https://secure.runescape.com/m=hiscore/index_lite.ws?player=$playerName")
+                    HttpClientProvider.client.get("https://secure.runescape.com/m=hiscore/index_lite.ws?player=$processedName")
                 val responseBody = response.bodyAsText()
 
                 return@withContext parseResponse(responseBody)

@@ -50,7 +50,9 @@ object MeCommand {
         // Respond to the user
         response.respond {
             content =
-                "RuneScape Profile [$runescapeUsername](https://secure.runescape.com/m=hiscore/compare?user1=$runescapeUsername) has been linked to your Discord profile."
+                "RuneScape Profile [$runescapeUsername](https://secure.runescape.com/m=hiscore/compare?user1=${
+                    runescapeUsername.trim().replace(" ", "_")
+                }) has been linked to your Discord profile."
         }
 
         // Log the successful response to the user
