@@ -5,11 +5,6 @@ on:
     branches:
       - master
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version number'
-        required: true
-        default: '1.0.0'
 
 jobs:
   build:
@@ -27,17 +22,26 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Get the current version
+        id: get_version
+        run: |
+          # Get the latest tag, or fallback to v0.0.0 if none found
+          latest_tag=$(git describe --tags --abbrev=0 || echo "v0.0.0")
+          # Strip any leading 'v' from the tag for the new version number
+          version_number=$(echo $latest_tag | sed 's/^v//' | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          echo "version=$version_number" >> $GITHUB_ENV
+
       - name: Build with Gradle
         run: ./gradlew clean build
 
       - name: Rename JAR file
-        run: mv build/libs/RSDB-1.0-SNAPSHOT.jar build/libs/RSDB-v${{ github.event.inputs.version }}.jar
+        run: mv build/libs/RSDB-1.0-SNAPSHOT.jar build/libs/RSDB-v${{ env.version }}.jar
 
       - name: Upload JAR as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: RSDB-v${{ github.event.inputs.version }}.jar
-          path: build/libs/RSDB-v${{ github.event.inputs.version }}.jar
+          name: RSDB-v${{ env.version }}.jar
+          path: build/libs/RSDB-v${{ env.version }}.jar
 
       - name: Create GitHub Release
         id: create_release
@@ -45,8 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.RSDB_ACTIONS_PAT }}
         with:
-          tag_name: "v${{ github.event.inputs.version }}"
-          release_name: "Release v${{ github.event.inputs.version }}"
+          tag_name: "v${{ env.version }}"
+          release_name: "Release v${{ env.version }}"
           draft: false
           prerelease: false
 
@@ -56,6 +60,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RSDB_ACTIONS_PAT }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/RSDB-v${{ github.event.inputs.version }}.jar
-          asset_name: RSDB-v${{ github.event.inputs.version }}.jar
+          asset_path: build/libs/RSDB-v${{ env.version }}.jar
+          asset_name: RSDB-v${{ env.version }}.jar
           asset_content_type: application/java-archive
