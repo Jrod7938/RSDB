@@ -51,7 +51,7 @@ object MeCommand {
         response.respond {
             content =
                 "RuneScape Profile [$runescapeUsername](https://secure.runescape.com/m=hiscore/compare?user1=${
-                    runescapeUsername.trim().replace(" ", "_")
+                    runescapeUsername.trim().replace(" ", "+")
                 }) has been linked to your Discord profile."
         }
 
