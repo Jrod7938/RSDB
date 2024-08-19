@@ -1,3 +1,12 @@
+/*
+ * This file is part of the RuneScape Discord Bot project.
+ *
+ * Licensed under the MIT License. You may obtain a copy of the License at
+ * https://opensource.org/licenses/MIT
+ *
+ * © 2024 Jancarlos Rodriguez, Omar Rodriguez
+ */
+
 package com.rsdb.services
 
 import com.rsdb.models.HighscoreEntry
